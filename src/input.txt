@@ -1,0 +1,3 @@
+'RATO,BOLA'
+'RATO,NOVELO'
+'Rex,Fofo'
