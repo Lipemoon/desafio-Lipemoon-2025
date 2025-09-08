@@ -47,12 +47,39 @@ class AbrigoAnimais {
           }
         }
       }
+      const brinquedosValidos = ['RATO', 'BOLA', 'LASER', 'NOVELO', 'CAIXA', 'SKATE'];
+      const brinquedosLista = [];
+      const brinquedosTotalPessoa1 = brinquedosPessoa1.split(',');
+      for (let i = 0; i < brinquedosTotalPessoa1.length; i += 1) { 
+        if (brinquedosLista.length == brinquedosTotalPessoa1.length) {
+          break;
+        }
+        for (let j = 0; j < brinquedosValidos.length; j += 1) { 
+          if (brinquedosPessoa1.includes(brinquedosValidos[j])) {
+            brinquedosLista.push(brinquedosValidos[j]);
+          }
+        }
+      }
+      if (brinquedosLista.length < brinquedosTotalPessoa1.length) { 
+        throw new BrinquedoInvalido('Brinquedo inválido');
+      }
+      for (let i = 0;i < brinquedosLista.length; i += 1) {
+        for (let j = i + 1; j < brinquedosLista.length; j += 1) {
+          if (brinquedosLista[i] === brinquedosLista[j]) {
+            throw new BrinquedoInvalido('Brinquedo inválido');
+          }
+        }
+      }
+
+
+
+
 
       if (ordemAnimais.includes(animais.Rex.nome)) {
       if (brinquedosPessoa1.includes(animais.Rex.brinquedos)) {
         lista.push(`${animais.Rex.nome} - pessoa 1`);
       }
-    } 
+    }   
 
     if (ordemAnimais.includes(animais.Fofo.nome)) {
       if (brinquedosPessoa2.includes(animais.Fofo.brinquedos[0]) && brinquedosPessoa2.includes(animais.Fofo.brinquedos[1])) {
