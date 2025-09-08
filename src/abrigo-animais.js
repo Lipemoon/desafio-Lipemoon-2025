@@ -1,22 +1,55 @@
 import fs from "fs";
-
+import { Animal } from "./animal.js";
+import { AnimalInvalido } from "./exceptions/AnimalInvalido.js";
+import { BrinquedoInvalido } from "./exceptions/BrinquedoInvalido.js";
 class AbrigoAnimais {
 
   encontraPessoas(brinquedosPessoa1, brinquedosPessoa2, ordemAnimais) {
-    const animais = {
-      Rex:  { nome: 'Rex', raca: 'cao', brinquedos: ['RATO','BOLA'] },
-      Mimi: { nome: 'Mimi', raca: 'gato', brinquedos: ['BOLA','LASER'] },
-      Fofo: { nome: 'Fofo', raca: 'gato', brinquedos: ['BOLA','RATO','LASER'] },
-      Zero: { nome: 'Zero', raca: 'gato', brinquedos: ['RATO','BOLA'] },
-      Bola: { nome: 'Bola', raca: 'cao', brinquedos: ['CAIXA', 'NOVELO'] },
-      Bebe: { nome: 'Bebe', raca: 'cao', brinquedos: ['LASER', 'RATO', 'BOLA'] },
-      Loco: { nome: 'Loco', raca: 'jabuti', brinquedos: ['SKATE', 'RATO'] },
-    };
+    try {
+      const animais = new Animal();
+      const lista = [];     
+      const animaisLista = [];
+      const ordemAnimaisTamanho = ordemAnimais.split(',');
+      for (let i = 0; i < ordemAnimaisTamanho.length; i += 1) { 
+        if (animaisLista.length == ordemAnimaisTamanho.length) {
+          break;
+        }
+        if (ordemAnimais.includes(animais.Rex.nome)) {
+          animaisLista.push(animais.Rex.nome);
+        }
+        if (ordemAnimais.includes(animais.Mimi.nome)) {
+          animaisLista.push(animais.Mimi.nome);
+        }
+        if (ordemAnimais.includes(animais.Fofo.nome)) {
+          animaisLista.push(animais.Fofo.nome);
+        }
+        if (ordemAnimais.includes(animais.Zero.nome)) {
+          animaisLista.push(animais.Zero.nome);
+        }
+        if (ordemAnimais.includes(animais.Bola.nome)) {
+          animaisLista.push(animais.Bola.nome);
+        }
+        if (ordemAnimais.includes(animais.Bebe.nome)) {
+          animaisLista.push(animais.Bebe.nome);
+        }
+        if (ordemAnimais.includes(animais.Loco.nome)) {
+          animaisLista.push(animais.Loco.nome);
+        }
+      }
+      if (animaisLista.length < ordemAnimaisTamanho.length) { 
+        throw new AnimalInvalido('Animal inválido');
+      }
 
-    const lista = [];
-    if (ordemAnimais.includes(animais.Rex.nome)) {
-      if (brinquedosPessoa1.includes(animais.Rex.brinquedos[0]) && brinquedosPessoa1.includes(animais.Rex.brinquedos[1])) {
-        console.log('animal dos inferno');
+      for (let i = 0;i < animaisLista.length; i += 1) {
+        for (let j = i + 1; j < animaisLista.length; j += 1) {
+          if (animaisLista[i] === animaisLista[j]) {
+            throw new AnimalInvalido('Animal inválido');
+          }
+        }
+      }
+
+      if (ordemAnimais.includes(animais.Rex.nome)) {
+      if (brinquedosPessoa1.includes(animais.Rex.brinquedos)) {
         lista.push(`${animais.Rex.nome} - pessoa 1`);
       }
     } 
@@ -34,6 +67,13 @@ class AbrigoAnimais {
     console.log('Pessoa 2:', brinquedosPessoa2);
     console.log('Ordem dos animais:', ordemAnimais);
     console.log(lista);
+    } catch (error) { 
+      if (error instanceof AnimalInvalido) {
+        return console.log({ erro: error.message});
+      } else if (error instanceof BrinquedoInvalido) {
+        return console.log({ erro: error.message});
+      }
+    }
   }
 }
 
