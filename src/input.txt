@@ -1,3 +1,0 @@
-'BOLA,LASER'
-'BOLA,NOVELO,RATO,LASER'
-'Mimi,Fofo,Rex,Bola'
