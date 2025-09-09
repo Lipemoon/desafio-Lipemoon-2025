@@ -21,12 +21,9 @@ const animaisDisponiveis = [
 function acharAnimalPeloNome(animalProcurado) {
   for (let i = 0; i < animaisDisponiveis.length; i++) {
     if (animaisDisponiveis[i].nome == animalProcurado) {
-      console.log('retornando animal chamado ' + animaisDisponiveis[i].nome)
       return animaisDisponiveis[i];
     }
   }
 }
-
   
-
 export { Animal as Animal, animaisDisponiveis, acharAnimalPeloNome };

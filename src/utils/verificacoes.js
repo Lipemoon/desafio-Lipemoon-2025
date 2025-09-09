@@ -77,14 +77,39 @@ function verificarAdocaoDoAnimalLoco(brinquedosPessoa, brinquedosDoLoco) {
     for (let j = 0; j < brinquedosDoLoco.length; j++) {
       if (brinquedosPessoa[i] == brinquedosDoLoco[j]) {
         contagemBrinquedos++
-        console.log(contagemBrinquedos)
       }
       if (contagemBrinquedos == brinquedosDoLoco.length) {
-        console.log('entrou no true e saiu' + contagemBrinquedos)
         return true;
       }
     }
   }
   return false;
 }
-export {verificarAnimaisValidos, verificarBrinquedosValidos, verificarAdocaoAnimal, verificarAdocaoDoAnimalLoco};
+
+function verificarPropriaLista(lista) {
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].includes('pessoa')) {
+      return true;
+    }
+  }
+}
+
+function verificarBrinquedosUsados(brinquedosPessoa, brinquedosDoAnimal) {
+  for (let i = 0; i < brinquedosPessoa.length; i += 1) {
+    for (let j = 0; j < brinquedosDoAnimal.length; j += 1) {
+      if (brinquedosPessoa[i] === brinquedosDoAnimal[j]) {
+        brinquedosPessoa.splice(i, 1);
+      }
+    }
+  }
+  const brinquedosNovosDaPessoa = brinquedosPessoa;
+  return brinquedosNovosDaPessoa;
+}
+
+export {verificarAnimaisValidos, 
+  verificarBrinquedosValidos, 
+  verificarAdocaoAnimal, 
+  verificarAdocaoDoAnimalLoco,
+  verificarPropriaLista,
+  verificarBrinquedosUsados
+};
