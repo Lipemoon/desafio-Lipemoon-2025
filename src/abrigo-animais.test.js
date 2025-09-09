@@ -83,6 +83,36 @@ describe('Abrigo de Animais', () => {
       expect(resultado.erro).toBeFalsy();
   });
 
+  test('Deve adotar somente o gato Zero porque o gato não divide seus brinquedos', () => {
+    const resultado = new AbrigoAnimais().encontraPessoas(
+      'LASER,RATO,BOLA,SKATE,CAIXA,NOVELO', 'RATO', 'Mimi,Fofo,Zero');
+      expect(resultado.lista[0]).toBe('Fofo - abrigo');
+      expect(resultado.lista[1]).toBe('Mimi - abrigo');
+      expect(resultado.lista[2]).toBe('Zero - pessoa 1');
+      expect(resultado.lista.length).toBe(3);
+      expect(resultado.erro).toBeFalsy();
+  });
+
+  test('Deve adotar somente o gato Mimi porque o gato não divide seus brinquedos', () => {
+    const resultado = new AbrigoAnimais().encontraPessoas(
+      'RATO,BOLA,SKATE,CAIXA,NOVELO,LASER', 'RATO', 'Mimi,Fofo,Zero');
+      expect(resultado.lista[0]).toBe('Fofo - abrigo');
+      expect(resultado.lista[1]).toBe('Mimi - pessoa 1');
+      expect(resultado.lista[2]).toBe('Zero - abrigo');
+      expect(resultado.lista.length).toBe(3);
+      expect(resultado.erro).toBeFalsy();
+  });
+
+  test('Deve adotar somente o gato Fofo porque o gato não divide seus brinquedos', () => {
+    const resultado = new AbrigoAnimais().encontraPessoas(
+      'BOLA,SKATE,RATO,CAIXA,NOVELO,LASER', 'RATO', 'Zero,Fofo,Mimi');
+      expect(resultado.lista[0]).toBe('Fofo - pessoa 1');
+      expect(resultado.lista[1]).toBe('Mimi - abrigo');
+      expect(resultado.lista[2]).toBe('Zero - abrigo');
+      expect(resultado.lista.length).toBe(3);
+      expect(resultado.erro).toBeFalsy();
+  });
+
   test('Deve adotar somente a Mimi porque o gato não divide seus brinquedos', () => {
     const resultado = new AbrigoAnimais().encontraPessoas(
       'RATO,BOLA,LASER', 'RATO', 'Mimi,Rex');
