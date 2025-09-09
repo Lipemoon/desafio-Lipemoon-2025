@@ -1,0 +1,3 @@
+'RATO,BOLA,SKATE'
+'BOLA,NOVELO,LASER'
+'Rex,Loco,Bola'

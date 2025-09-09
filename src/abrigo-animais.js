@@ -1,6 +1,6 @@
-import { animaisDisponiveis } from "./models/animal.js";
+import { animaisDisponiveis, acharAnimalPeloNome } from "./models/animal.js";
 import { AnimalInvalido } from "./exceptions/AnimalInvalido.js";
-import { verificarAnimaisValidos, verificarBrinquedosValidos } from "./utils/verificacoes.js";
+import { verificarAnimaisValidos, verificarBrinquedosValidos, verificarAdocaoAnimal, verificarAdocaoDoAnimalLoco } from "./utils/verificacoes.js";
 import { BrinquedoInvalido } from "./exceptions/BrinquedoInvalido.js";
 
 class AbrigoAnimais {
@@ -8,179 +8,80 @@ class AbrigoAnimais {
   encontraPessoas(brinquedosPessoa1, brinquedosPessoa2, ordemAnimais) {
     try {
       const lista = [];     
-      
-      if (verificarAnimaisValidos(ordemAnimais)) {
-        console.log('Animais válidos');
-      } else {
+      if (!verificarAnimaisValidos(ordemAnimais)) {
         throw new AnimalInvalido('Animal inválido');
       }
-     
-      if (verificarBrinquedosValidos(brinquedosPessoa1) && verificarBrinquedosValidos(brinquedosPessoa2)) {
-        console.log('Brinquedos válidos');
-      } else {
+      
+      if (!verificarBrinquedosValidos(brinquedosPessoa1) || !verificarBrinquedosValidos(brinquedosPessoa2)) {
         throw new BrinquedoInvalido('Brinquedo inválido');
       }
 
-      let brinquedosPessoa1Splitados = brinquedosPessoa1.replaceAll("'", "");
-      brinquedosPessoa1Splitados = brinquedosPessoa1Splitados.split(",");
+      let brinquedosPessoa1Splitados = splitString(brinquedosPessoa1);
+      let brinquedosPessoa2Splitados = splitString(brinquedosPessoa2);
+      let ordemAnimaisSplitados = splitString(ordemAnimais);
+      
       console.log(brinquedosPessoa1Splitados);
-
-      let brinquedosPessoa2Splitados = brinquedosPessoa2.replaceAll("'", "");
-      brinquedosPessoa2Splitados = brinquedosPessoa2Splitados.split(",");
       console.log(brinquedosPessoa2Splitados);
-
-      let ordemAnimaisSplitados = ordemAnimais.replaceAll("'", "");
-      ordemAnimaisSplitados = ordemAnimaisSplitados.split(",");
       console.log(ordemAnimaisSplitados);
 
-      for (let i = 0; i < ordemAnimaisSplitados.length; i += 1) {
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[0].nome) {
-          if (brinquedosPessoa1.match(/RATO.*BOLA/) && brinquedosPessoa2.match(/RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[0].nome} - abrigo`);
-          } else if (brinquedosPessoa1.match(/RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[0].nome} - pessoa 1`);
-            console.log('entrou Rex 1');  
-          } else if (brinquedosPessoa2.match(/RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[0].nome} - pessoa 2`);
-            console.log('entrou Rex 2');  
-          } else {
-            lista.push(`${animaisDisponiveis[0].nome} - abrigo`);
-          }
-        }
+      let contagemAnimaisPessoa1 = 0;
+      let contagemAnimaisPessoa2 = 0;
 
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[1].nome) {
-          if (brinquedosPessoa1.match(/BOLA.*LASER/) && brinquedosPessoa2.match(/BOLA.*LASER/)) {
-            lista.push(`${animaisDisponiveis[1].nome} - abrigo`);
-          } else if (brinquedosPessoa1.match(/BOLA.*LASER/)) {
-            brinquedosPessoa1Splitados.pop('BOLA');
-            brinquedosPessoa1Splitados.pop('LASER');
-            brinquedosPessoa1 = brinquedosPessoa1Splitados.toString();
-            lista.push(`${animaisDisponiveis[1].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/BOLA.*LASER/)) {
-            brinquedosPessoa2Splitados.pop('BOLA');
-            brinquedosPessoa2Splitados.pop('LASER');
-            brinquedosPessoa2 = brinquedosPessoa2Splitados.toString();
-            lista.push(`${animaisDisponiveis[1].nome} - pessoa 2`);
-          } else {
-            lista.push(`${animaisDisponiveis[1].nome} - abrigo`);
-          }
-        }
+      ordemAnimaisSplitados.forEach(animal => {
+        const acharAnimal = acharAnimalPeloNome(animal);
+        const brinquedosDoAnimal = acharAnimal.brinquedos;
+        let destinoDoAnimal = '';
+        if (acharAnimal.nome === 'Loco' && verificarPropriaLista(lista)) {
+          console.log('entrou no loco');
+          const pessoa1PodeAdotarLoco = verificarAdocaoDoAnimalLoco(brinquedosPessoa1Splitados, brinquedosDoAnimal);
+          const pessoa2PodeAdotarLoco = verificarAdocaoDoAnimalLoco(brinquedosPessoa2Splitados, brinquedosDoAnimal);
 
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[2].nome) {
-          if (brinquedosPessoa1.match(/BOLA.*RATO.*LASER/) && brinquedosPessoa2.match(/BOLA.*RATO.*LASER/)) {
-            lista.push(`${animaisDisponiveis[2].nome} - abrigo`);
-          }
-          if (brinquedosPessoa1.match(/BOLA.*RATO.*LASER/)) {
-            brinquedosPessoa1Splitados.pop('BOLA');
-            brinquedosPessoa1Splitados.pop('RATO');
-            brinquedosPessoa1Splitados.pop('LASER');
-            brinquedosPessoa1 = brinquedosPessoa1Splitados.toString();
-            lista.push(`${animaisDisponiveis[2].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/BOLA.*RATO.*LASER/)) {
-            brinquedosPessoa2Splitados.pop('BOLA');
-            brinquedosPessoa2Splitados.pop('RATO');
-            brinquedosPessoa2Splitados.pop('LASER');
-            brinquedosPessoa2 = brinquedosPessoa2Splitados.toString();
-            lista.push(`${animaisDisponiveis[2].nome} - pessoa 2`);
+          if (pessoa1PodeAdotarLoco && pessoa2PodeAdotarLoco) {
+            destinoDoAnimal = 'abrigo';
+          } else if (pessoa1PodeAdotarLoco && contagemAnimaisPessoa1 < 3) {
+            destinoDoAnimal = 'pessoa 1';
+          } else if (pessoa2PodeAdotarLoco && contagemAnimaisPessoa2 < 3) {
+            destinoDoAnimal = 'pessoa 2';
           } else {
-            lista.push(`${animaisDisponiveis[2].nome} - abrigo`);
+            destinoDoAnimal = 'abrigo';
           }
-        }
-        
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[3].nome) {
-          if (brinquedosPessoa1.match(/RATO.*BOLA/) && brinquedosPessoa2.match(/RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[3].nome} - abrigo`);
-          } else if (brinquedosPessoa1.match(/RATO.*BOLA/)) {
-            brinquedosPessoa1Splitados.pop('RATO');
-            brinquedosPessoa1Splitados.pop('BOLA');
-            brinquedosPessoa1 = brinquedosPessoa1Splitados.toString();
-            lista.push(`${animaisDisponiveis[3].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/RATO.*BOLA/)) {
-            brinquedosPessoa2Splitados.pop('RATO');
-            brinquedosPessoa2Splitados.pop('BOLA');
-            brinquedosPessoa2 = brinquedosPessoa2Splitados.toString();
-            lista.push(`${animaisDisponiveis[3].nome} - pessoa 2`);
-          } else {
-            lista.push(`${animaisDisponiveis[3].nome} - abrigo`);
-          }
-        }
+        } else {
+          const pessoa1PodeAdotarAnimal = verificarAdocaoAnimal(brinquedosPessoa1Splitados, brinquedosDoAnimal);
+        const pessoa2PodeAdotarAnimal = verificarAdocaoAnimal(brinquedosPessoa2Splitados, brinquedosDoAnimal);
 
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[4].nome) {
-          if (brinquedosPessoa1.match(/CAIXA.*NOVELO/) && brinquedosPessoa2.match(/CAIXA.*NOVELO/)) {
-            lista.push(`${animaisDisponiveis[4].nome} - abrigo`);
-          } else if (brinquedosPessoa1.match(/CAIXA.*NOVELO/)) {
-            lista.push(`${animaisDisponiveis[4].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/CAIXA.*NOVELO/)) {
-            lista.push(`${animaisDisponiveis[4].nome} - pessoa 2`);
-          } else {
-            lista.push(`${animaisDisponiveis[4].nome} - abrigo`);
-          }
-        }
-
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[5].nome) {
-          if (brinquedosPessoa1.match(/LASER.*RATO.*BOLA/) && brinquedosPessoa2.match(/LASER.*RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[5].nome} - abrigo`);
-          }
-          if (brinquedosPessoa1.match(/LASER.*RATO.*BOLA/)) {
-            lista.push(`${animaisDisponiveis[5].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/LASER.*RATO.*BOLA/)) { 
-            lista.push(`${animaisDisponiveis[5].nome} - pessoa 2`);
-          } else {
-            lista.push(`${animaisDisponiveis[5].nome} - abrigo`);
-          }
-        }
-
-        if (ordemAnimaisSplitados[i] == animaisDisponiveis[6].nome) {
-          if (lista.includes('pessoa 1') || lista.includes('pessoa 2')) {
-             if (brinquedosPessoa1.includes(animaisDisponiveis[6].brinquedos) && brinquedosPessoa2.includes(animaisDisponiveis[6].brinquedos)) {
-                lista.push(`${animaisDisponiveis[6].nome} - abrigo`);
-            }
-            if (brinquedosPessoa1.includes(animaisDisponiveis[6].brinquedos)) {
-              lista.push(`${animaisDisponiveis[6].nome} - pessoa 1`);
-            } else if (brinquedosPessoa2.includes(animaisDisponiveis[6].brinquedos)) {
-              lista.push(`${animaisDisponiveis[6].nome} - pessoa 2`);
-            } else {
-              lista.push(`${animaisDisponiveis[6].nome} - abrigo`);
-            }
-          }
-          if (brinquedosPessoa1.match(/SKATE.*RATO/) && brinquedosPessoa2.match(/SKATE.*RATO/)) {
-            lista.push(`${animaisDisponiveis[6].nome} - abrigo`);
-          }
-          if (brinquedosPessoa1.match(/SKATE.*RATO/)) {
-            lista.push(`${animaisDisponiveis[6].nome} - pessoa 1`);
-          } else if (brinquedosPessoa2.match(/SKATE.*RATO/)) {
-            lista.push(`${animaisDisponiveis[6].nome} - pessoa 2`);
-          } else {
-            lista.push(`${animaisDisponiveis[6].nome} - abrigo`);
-          }
-        }
-        
-        lista.forEach(item => {
-          let contagemAnimaisPessoa1 = 0;
-          let contagemAnimaisPessoa2 = 0;
-          if (item.includes('pessoa 1')) {
+        if (acharAnimal.raca === 'gato') {
+          if (pessoa1PodeAdotarAnimal && pessoa2PodeAdotarAnimal) {
+            destinoDoAnimal = 'abrigo';
+          } else if (pessoa1PodeAdotarAnimal && contagemAnimaisPessoa1 < 3) {
+            destinoDoAnimal = 'pessoa 1';
             contagemAnimaisPessoa1 += 1;
-          }
-          if (item.includes('pessoa 2')) {
+            brinquedosPessoa1Splitados = removerBrinquedosUsados(brinquedosPessoa1Splitados, brinquedosDoAnimal);
+          } else if (pessoa2PodeAdotarAnimal && contagemAnimaisPessoa2 < 3) {
+            destinoDoAnimal = 'pessoa 2';
             contagemAnimaisPessoa2 += 1;
-          }
+            brinquedosPessoa2Splitados = removerBrinquedosUsados(brinquedosPessoa2Splitados, brinquedosDoAnimal);
+        } else {
+            destinoDoAnimal = 'abrigo';
+        }
+      } else if (pessoa1PodeAdotarAnimal && pessoa2PodeAdotarAnimal) {
+          destinoDoAnimal = 'abrigo';
+        } else if (pessoa1PodeAdotarAnimal && contagemAnimaisPessoa1 < 3) {
+          destinoDoAnimal = 'pessoa 1';
+          contagemAnimaisPessoa1 += 1;
+        } else if (pessoa2PodeAdotarAnimal && contagemAnimaisPessoa2 < 3) {
+          destinoDoAnimal = 'pessoa 2';
+          contagemAnimaisPessoa2 += 1;
+        } else {
+          destinoDoAnimal = 'abrigo';
+        }
+        }
 
-          if (contagemAnimaisPessoa1 > 3 || contagemAnimaisPessoa2 > 3) {
-            lista.pop(item);
-          }
-        });
-
-
-
-
-      }
+        lista.push(`${acharAnimal.nome} - ${destinoDoAnimal}`);
+      });
 
     lista.sort();
-    console.log('Pessoa 1:', brinquedosPessoa1);
-    console.log('Pessoa 2:', brinquedosPessoa2);
-    console.log('Ordem dos animais:', ordemAnimais);
     console.log(lista);
-    return { lista };
+    return { lista: lista };
     } catch (error) { 
       if (error instanceof AnimalInvalido) {
         return { erro: error.message};
@@ -189,7 +90,34 @@ class AbrigoAnimais {
       }
     }
   }
+
+  
 }
 
 
+function splitString(string) {
+    let result = string.replaceAll("'", "");
+    result = result.replaceAll("\r", "");
+    return result.split(",");
+}
+
+function removerBrinquedosUsados(brinquedosPessoa, brinquedosDoAnimal) { 
+  for (let i = 0; i < brinquedosPessoa.length; i += 1) {
+    for (let j = 0; j < brinquedosDoAnimal.length; j += 1) {
+      if (brinquedosPessoa[i] === brinquedosDoAnimal[j]) {
+        brinquedosPessoa.splice(i, 1);
+      }
+    }
+  }
+  const brinquedosNovosDaPessoa = brinquedosPessoa;
+  return brinquedosNovosDaPessoa;
+}
+function verificarPropriaLista(lista) {
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].includes('pessoa')) {
+      console.log('retornando true porque achou a palavra pessoa em ' + lista[i])
+      return true;
+    }
+  }
+}
 export { AbrigoAnimais as AbrigoAnimais };

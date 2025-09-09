@@ -5,6 +5,7 @@ class Animal {
     this.raca = raca;
     this.brinquedos = brinquedos;
   }
+
 }
 
 const animaisDisponiveis = [
@@ -16,6 +17,16 @@ const animaisDisponiveis = [
   new Animal('Bebe', 'cao', ['LASER', 'RATO', 'BOLA']),
   new Animal('Loco', 'jabuti', ['SKATE', 'RATO'])
 ];
+
+function acharAnimalPeloNome(animalProcurado) {
+  for (let i = 0; i < animaisDisponiveis.length; i++) {
+    if (animaisDisponiveis[i].nome == animalProcurado) {
+      console.log('retornando animal chamado ' + animaisDisponiveis[i].nome)
+      return animaisDisponiveis[i];
+    }
+  }
+}
+
   
 
-export { Animal as Animal, animaisDisponiveis };
+export { Animal as Animal, animaisDisponiveis, acharAnimalPeloNome };

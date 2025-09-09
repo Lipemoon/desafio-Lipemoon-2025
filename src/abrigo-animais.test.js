@@ -55,4 +55,17 @@ describe('Abrigo de Animais', () => {
       expect(resultado.lista.length).toBe(4);
       expect(resultado.erro).toBeFalsy();
   });
+
+  test('Deve adotar o animal Loco com companhia de outro animal', () => {
+    const resultado = new AbrigoAnimais().encontraPessoas('RATO,BOLA,SKATE',
+      'BOLA,NOVELO,LASER', 'Rex,Loco,Bola');
+
+      expect(resultado.lista[0]).toBe('Bola - abrigo');
+      expect(resultado.lista[1]).toBe('Loco - pessoa 1');
+      expect(resultado.lista[2]).toBe('Rex - pessoa 1');
+      expect(resultado.lista.length).toBe(3);
+      expect(resultado.erro).toBeFalsy();
+  });
+
+
 });

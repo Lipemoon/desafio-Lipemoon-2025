@@ -58,5 +58,33 @@ function verificarBrinquedosValidos(brinquedosPessoa) {
       return true;
 }
 
+function verificarAdocaoAnimal(brinquedosPessoa, brinquedosDoAnimal) {
+  let contagemBrinquedos = 0;
+  for (let i = 0; i < brinquedosPessoa.length; i += 1) {
+      if (brinquedosPessoa[i] == brinquedosDoAnimal[contagemBrinquedos]) {
+        contagemBrinquedos += 1;
+      }
+      if (contagemBrinquedos == brinquedosDoAnimal.length) {
+        return true;
+      }
+  }
+  return false;
+}
 
-export {verificarAnimaisValidos, verificarBrinquedosValidos};
+function verificarAdocaoDoAnimalLoco(brinquedosPessoa, brinquedosDoLoco) {
+  let contagemBrinquedos = 0;
+  for (let i = 0; i < brinquedosPessoa.length; i += 1) {
+    for (let j = 0; j < brinquedosDoLoco.length; j++) {
+      if (brinquedosPessoa[i] == brinquedosDoLoco[j]) {
+        contagemBrinquedos++
+        console.log(contagemBrinquedos)
+      }
+      if (contagemBrinquedos == brinquedosDoLoco.length) {
+        console.log('entrou no true e saiu' + contagemBrinquedos)
+        return true;
+      }
+    }
+  }
+  return false;
+}
+export {verificarAnimaisValidos, verificarBrinquedosValidos, verificarAdocaoAnimal, verificarAdocaoDoAnimalLoco};
